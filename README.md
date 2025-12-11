@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
   <meta charset="UTF-8" />
@@ -461,7 +460,4 @@
     <div class="actions">
       <button id="checkBtn">ตรวจคำตอบทั้งหมด</button>
     </div>
-    });
-  </script>
-</body>
 </html>
