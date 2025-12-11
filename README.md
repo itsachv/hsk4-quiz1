@@ -460,4 +460,3 @@
     <div class="actions">
       <button id="checkBtn">ตรวจคำตอบทั้งหมด</button>
     </div>
-</html>
