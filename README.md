@@ -1,1 +1,878 @@
-# hsk4-quiz1
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <title>糖和大脑 - HSK4 阅读测验</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f7fb;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 24px 20px 60px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 26px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .article-box {
+      background: #f0f4ff;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 28px;
+      border: 1px solid #d7e0ff;
+    }
+
+    .article-title {
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .article-text {
+      font-size: 14px;
+    }
+
+    .quiz-intro {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .question {
+      margin-bottom: 22px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid #e2e6f0;
+      background: #fafbff;
+      position: relative;
+    }
+
+    .question.correct {
+      border-color: #28a745;
+      background: #f2fff5;
+    }
+
+    .question.incorrect {
+      border-color: #dc3545;
+      background: #fff5f5;
+    }
+
+    .question-header {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .question-zh {
+      margin-bottom: 4px;
+    }
+
+    .question-th {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    .choices {
+      margin-top: 4px;
+    }
+
+    .choice {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .choice input {
+      margin-right: 6px;
+    }
+
+    .actions {
+      text-align: center;
+      margin: 30px 0 18px;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 26px;
+      font-size: 15px;
+      font-weight: 600;
+      background: #3b82f6;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(59,130,246,0.3);
+      transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.2s;
+    }
+
+    button:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(37,99,235,0.35);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 14px rgba(37,99,235,0.25);
+    }
+
+    .score-box {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: none;
+    }
+
+    .score-box span {
+      font-size: 18px;
+    }
+
+    .explanation {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed #d0d5e5;
+      font-size: 13px;
+      display: none;
+    }
+
+    .exp-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .exp-block {
+      margin-bottom: 4px;
+    }
+
+    .exp-choice-label {
+      font-weight: 600;
+    }
+
+    .exp-correct {
+      color: #1a7f37;
+    }
+
+    .exp-wrong {
+      color: #b42318;
+    }
+
+    .footer-note {
+      margin-top: 30px;
+      font-size: 12px;
+      color: #777;
+      text-align: center;
+    }
+
+    /* กล่อง feedback ใหม่ */
+    .feedback-box {
+      margin-top: 32px;
+      padding: 16px 18px;
+      border-radius: 12px;
+      border: 1px solid #e2e6f0;
+      background: #f9fafb;
+    }
+
+    .feedback-title {
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feedback-sub {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .rating-row {
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .rating-row label {
+      margin-right: 8px;
+      cursor: pointer;
+    }
+
+    .feedback-textarea {
+      width: 100%;
+      min-height: 80px;
+      border-radius: 8px;
+      border: 1px solid #d0d5e5;
+      padding: 8px 10px;
+      font-size: 14px;
+      resize: vertical;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    .feedback-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .feedback-msg {
+      font-size: 13px;
+      color: #16a34a;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 16px;
+        padding: 16px 12px 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>《糖和大脑》HSK4 阅读测验</h1>
+    <div class="subtitle">
+      อ่านบทความภาษาจีน → ตอบคำถาม 10 ข้อ → กดตรวจคำตอบ → ดูเฉลย และให้คะแนนแบบทดสอบ + รีวิวได้ท้ายหน้า
+    </div>
+
+    <!-- บทความ -->
+    <div class="article-box">
+      <div class="article-title">文章：糖和大脑（HSK4短文版）</div>
+      <div class="article-text">
+        “糖”是一种碳水化合物，在蛋糕、饮料、番茄酱、酸奶等很多食物里都能看到。
+        当我们吃到甜味时，舌头上的甜味点会把信号传给大脑。这个信号会启动大脑的奖励系统，
+        让我们觉得开心，并想“要不要再吃一次”。<br><br>
+        在奖励系统里，一个很重要的化学物质叫多巴胺。多巴胺越多，我们就越觉得快乐。
+        糖能让多巴胺增加，但像西兰花这样的食物不会有这样的作用。<br><br>
+        大脑喜欢新的味道，所以多巴胺的变化会因为新的食物而改变。如果一个人吃太多糖，
+        多巴胺不会变得稳定，而是会一直保持在较高水平，让人觉得想继续吃。
+        但是偶尔吃一块蛋糕是没有问题的。
+      </div>
+    </div>
+
+    <div class="quiz-intro">
+      👉 เลือกคำตอบที่ถูกต้องที่สุดในแต่ละข้อ (一个正确答案) แล้วกดปุ่มด้านล่างเพื่อดูคะแนนและเฉลย
+    </div>
+
+    <div id="scoreBox" class="score-box"></div>
+
+    <!-- ข้อ 1 -->
+    <div class="question" data-question="1" data-answer="B">
+      <div class="question-header">第 1 题</div>
+      <div class="question-zh">“糖”主要属于哪一种营养？</div>
+      <div class="question-th">น้ำตาลจัดเป็นสารอาหารประเภทไหนเป็นหลัก?</div>
+      <div class="choices">
+        <label class="choice">
+          <input type="radio" name="q1" value="A">
+          A. 蛋白质
+        </label>
+        <label class="choice">
+          <input type="radio" name="q1" value="B">
+          B. 碳水化合物
+        </label>
+        <label class="choice">
+          <input type="radio" name="q1" value="C">
+          C. 维生素
+        </label>
+        <label class="choice">
+          <input type="radio" name="q1" value="D">
+          D. 脂肪
+        </label>
+      </div>
+      <div class="explanation">
+        <div class="exp-title">解析（คำอธิบาย）</div>
+        <div class="exp-block exp-correct">
+          <span class="exp-choice-label">B. 碳水化合物：</span>
+          文章一开始就说：“糖是一种碳水化合物。”  
+          (บทความบอกตั้งแต่ประโยคแรกเลยว่า “น้ำตาลเป็นคาร์โบไฮเดรตชนิดหนึ่ง” จึงเป็นคำตอบที่ถูกต้อง)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">A. 蛋白质：</span>
+          文章没有把糖说成蛋白质。  
+          (บทความไม่เคยบอกว่าน้ำตาลเป็นโปรตีน จึงผิด)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">C. 维生素：</span>
+          糖不是维生素，只是能量来源之一。  
+          (น้ำตาลไม่ใช่วิตามิน เป็นแหล่งพลังงาน ไม่ใช่สารอาหารจุลภาคแบบวิตามิน)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">D. 脂肪：</span>
+          糖和脂肪是两种不同的营养。  
+          (น้ำตาลกับไขมันเป็นคนละกลุ่มสารอาหาร ไม่ใช่กลุ่มเดียวกัน)
+        </div>
+      </div>
+    </div>
+
+    <!-- ข้อ 2 -->
+    <div class="question" data-question="2" data-answer="B">
+      <div class="question-header">第 2 题</div>
+      <div class="question-zh">糖常常出现在哪些食物里？</div>
+      <div class="question-th">น้ำตาลมักจะถูกเติมลงไปในอาหารชนิดใดบ้างตามบทความ?</div>
+      <div class="choices">
+        <label class="choice">
+          <input type="radio" name="q2" value="A">
+          A. 面条和米饭
+        </label>
+        <label class="choice">
+          <input type="radio" name="q2" value="B">
+          B. 番茄酱和酸奶
+        </label>
+        <label class="choice">
+          <input type="radio" name="q2" value="C">
+          C. 水果和茶叶
+        </label>
+        <label class="choice">
+          <input type="radio" name="q2" value="D">
+          D. 清水和盐
+        </label>
+      </div>
+      <div class="explanation">
+        <div class="exp-title">解析（คำอธิบาย）</div>
+        <div class="exp-block exp-correct">
+          <span class="exp-choice-label">B. 番茄酱和酸奶：</span>
+          文章说糖在“蛋糕、饮料、番茄酱、酸奶等很多食物里都能看到”。  
+          (บทความบอกชัดเจนว่า “น้ำตาลพบได้ในเค้ก เครื่องดื่ม ซอสมะเขือเทศ และโยเกิร์ต” จึงตรงกับช้อยนี้)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">A. 面条和米饭：</span>
+          文章没有提到面条和米饭里加糖。  
+          (บทความไม่ได้พูดถึงเส้นก๋วยเตี๋ยวกับข้าวสวยเลย)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">C. 水果和茶叶：</span>
+          水果本身有糖，但文章说的是“被加在”某些食物里，这里重点是加工食品。  
+          (บทความเน้น “เติมน้ำตาลลงไป” ในอาหารแปรรูป ไม่ได้กล่าวถึงผลไม้หรือใบชาโดยตรง)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">D. 清水和盐：</span>
+          清水和盐里一般不会加糖。  
+          (น้ำเปล่ากับเกลือปกติไม่เติมน้ำตาล)
+        </div>
+      </div>
+    </div>
+
+    <!-- ข้อ 3 -->
+    <div class="question" data-question="3" data-answer="C">
+      <div class="question-header">第 3 题</div>
+      <div class="question-zh">当我们吃到甜味时，最先接收到信号的是？</div>
+      <div class="question-th">เมื่อเรากินของหวาน อวัยวะส่วนไหนรับสัญญาณก่อน?</div>
+      <div class="choices">
+        <label class="choice">
+          <input type="radio" name="q3" value="A">
+          A. 鼻子
+        </label>
+        <label class="choice">
+          <input type="radio" name="q3" value="B">
+          B. 牙齿
+        </label>
+        <label class="choice">
+          <input type="radio" name="q3" value="C">
+          C. 舌头上的甜味点
+        </label>
+        <label class="choice">
+          <input type="radio" name="q3" value="D">
+          D. 喉咙
+        </label>
+      </div>
+      <div class="explanation">
+        <div class="exp-title">解析（คำอธิบาย）</div>
+        <div class="exp-block exp-correct">
+          <span class="exp-choice-label">C. 舌头上的甜味点：</span>
+          文章说“舌头上的甜味点会把信号传给大脑”。  
+          (บทความบอกว่า “จุดรับรสหวานบนลิ้นจะส่งสัญญาณไปยังสมอง” จึงเป็นช้อยที่ถูก)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">A. 鼻子：</span>
+          鼻子主要负责闻气味，不是文章里的重点。  
+          (จมูกใช้ดมกลิ่น ไม่ได้กล่าวถึงในบริบทนี้)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">B. 牙齿：</span>
+          牙齿只是咬食物，没有“接收甜味信号”的功能。  
+          (ฟันมีหน้าที่เคี้ยว ไม่ใช่ตัวรับสัญญาณรสหวาน)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">D. 喉咙：</span>
+          喉咙负责吞咽，也不是文章中提到的“甜味点”。  
+          (ลำคอใช้กลืนอาหาร ไม่ใช่ตัวรับรส)
+        </div>
+      </div>
+    </div>
+
+    <!-- ข้อ 4 -->
+    <div class="question" data-question="4" data-answer="B">
+      <div class="question-header">第 4 题</div>
+      <div class="question-zh">甜味信号会让大脑里的什么开始工作？</div>
+      <div class="question-th">สัญญาณรสหวานไปกระตุ้นระบบใดในสมอง?</div>
+      <div class="choices">
+        <label class="choice">
+          <input type="radio" name="q4" value="A">
+          A. 呼吸系统
+        </label>
+        <label class="choice">
+          <input type="radio" name="q4" value="B">
+          B. 奖励系统
+        </label>
+        <label class="choice">
+          <input type="radio" name="q4" value="C">
+          C. 消化系统
+        </label>
+        <label class="choice">
+          <input type="radio" name="q4" value="D">
+          D. 循环系统
+        </label>
+      </div>
+      <div class="explanation">
+        <div class="exp-title">解析（คำอธิบาย）</div>
+        <div class="exp-block exp-correct">
+          <span class="exp-choice-label">B. 奖励系统：</span>
+          文章写道：“这个信号会启动大脑的奖励系统。”  
+          (บทความเขียนว่า “สัญญาณนี้จะไปเปิดระบบรางวัลของสมอง” จึงชัดเจนว่าต้องเลือกข้อนี้)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">A. 呼吸系统：</span>
+          呼吸系统和文章说的内容没有关系。  
+          (ระบบหายใจไม่เกี่ยวกับการตอบสนองต่อรสหวานในบทความนี้)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">C. 消化系统：</span>
+          虽然吃东西和消化有关，但文章重点是“奖励系统”。  
+          (ถึงแม้การกินจะเกี่ยวกับระบบย่อยอาหาร แต่ข้อความที่ยกมาพูดถึง “ระบบรางวัล” โดยตรง)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">D. 循环系统：</span>
+          循环系统负责血液循环，不是文章里的答案。  
+          (ระบบไหลเวียนเลือดไม่ใช่ระบบที่ถูกพูดถึงในประโยคนี้)
+        </div>
+      </div>
+    </div>
+
+    <!-- ข้อ 5 -->
+    <div class="question" data-question="5" data-answer="B">
+      <div class="question-header">第 5 题</div>
+      <div class="question-zh">奖励系统会让我们产生什么想法？</div>
+      <div class="question-th">ระบบรางวัลทำให้เราเกิดความคิดอะไรขึ้นมา?</div>
+      <div class="choices">
+        <label class="choice">
+          <input type="radio" name="q5" value="A">
+          A. 这个贵不贵？
+        </label>
+        <label class="choice">
+          <input type="radio" name="q5" value="B">
+          B. 要不要再吃一次？
+        </label>
+        <label class="choice">
+          <input type="radio" name="q5" value="C">
+          C. 我累不累？
+        </label>
+        <label class="choice">
+          <input type="radio" name="q5" value="D">
+          D. 我要不要工作？
+        </label>
+      </div>
+      <div class="explanation">
+        <div class="exp-title">解析（คำอธิบาย）</div>
+        <div class="exp-block exp-correct">
+          <span class="exp-choice-label">B. 要不要再吃一次？：</span>
+          文章说明奖励系统会让我们想“要不要再做一次”，在这里就是“再吃一次”。  
+          (บทความบอกว่า ระบบรางวัลทำให้เราอยาก “ทำอีกครั้งไหม” ซึ่งในบริบทนี้คือ “จะกินอีกไหม”)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">A. 这个贵不贵？：</span>
+          这是关于价格的问题，文章没有提到。  
+          (เป็นคำถามเรื่องราคา ซึ่งไม่ได้พูดถึงเลยในบทความ)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">C. 我累不累？：</span>
+          这是关于身体状态，不是奖励系统在文中的作用。  
+          (เป็นเรื่องว่าร่างกายเหนื่อยไหม ไม่ใช่หน้าที่ของระบบรางวัลที่บทความอธิบาย)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">D. 我要不要工作？：</span>
+          这个问题和吃糖没有直接关系。  
+          (เกี่ยวข้องกับการทำงาน ไม่เชื่อมโยงกับการกินน้ำตาลในบทความนี้)
+        </div>
+      </div>
+    </div>
+
+    <!-- ข้อ 6 -->
+    <div class="question" data-question="6" data-answer="B">
+      <div class="question-header">第 6 题</div>
+      <div class="question-zh">在奖励系统中，一个很重要的化学物质是？</div>
+      <div class="question-th">ในระบบรางวัล มีสารเคมีที่สำคัญตัวหนึ่งคืออะไร?</div>
+      <div class="choices">
+        <label class="choice">
+          <input type="radio" name="q6" value="A">
+          A. 盐
+        </label>
+        <label class="choice">
+          <input type="radio" name="q6" value="B">
+          B. 多巴胺
+        </label>
+        <label class="choice">
+          <input type="radio" name="q6" value="C">
+          C. 水分
+        </label>
+        <label class="choice">
+          <input type="radio" name="q6" value="D">
+          D. 氧气
+        </label>
+      </div>
+      <div class="explanation">
+        <div class="exp-title">解析（คำอธิบาย）</div>
+        <div class="exp-block exp-correct">
+          <span class="exp-choice-label">B. 多巴胺：</span>
+          文章写道：“一个很重要的化学物质叫多巴胺。”  
+          (บทความบอกชัด ๆ ว่า “สารเคมีที่สำคัญตัวหนึ่งชื่อว่าโดปามีน” จึงตอบข้อนี้)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">A. 盐：</span>
+          盐是矿物质，不是这里说的“奖励系统里的关键化学物质”。  
+          (เกลือเป็นแร่ธาตุ ไม่ใช่สารในระบบรางวัลตามที่บทความอธิบาย)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">C. 水分：</span>
+          水分很重要，但文章没有说它让人“觉得快乐”。  
+          (น้ำสำคัญต่อร่างกาย แต่บทความไม่ได้พูดว่ามันทำให้รู้สึกมีความสุข)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">D. 氧气：</span>
+          氧气关系到呼吸，不是奖励系统里的主角。  
+          (ออกซิเจนเกี่ยวกับการหายใจ ไม่ใช่ตัวหลักในระบบรางวัลที่พูดถึง)
+        </div>
+      </div>
+    </div>
+
+    <!-- ข้อ 7 -->
+    <div class="question" data-question="7" data-answer="C">
+      <div class="question-header">第 7 题</div>
+      <div class="question-zh">哪种食物不会让多巴胺增加？</div>
+      <div class="question-th">อาหารชนิดใด “ไม่ทำให้” โดปามีนเพิ่มขึ้นตามบทความ?</div>
+      <div class="choices">
+        <label class="choice">
+          <input type="radio" name="q7" value="A">
+          A. 蛋糕
+        </label>
+        <label class="choice">
+          <input type="radio" name="q7" value="B">
+          B. 冰淇淋
+        </label>
+        <label class="choice">
+          <input type="radio" name="q7" value="C">
+          C. 西兰花
+        </label>
+        <label class="choice">
+          <input type="radio" name="q7" value="D">
+          D. 甜饮料
+        </label>
+      </div>
+      <div class="explanation">
+        <div class="exp-title">解析（คำอธิบาย）</div>
+        <div class="exp-block exp-correct">
+          <span class="exp-choice-label">C. 西兰花：</span>
+          文章明确说“像西兰花这样的食物不会有这样的作用”，也就是不会让多巴胺增加。  
+          (บทความบอกชัด ๆ ว่า “อาหารอย่างบร็อกโคลีจะไม่มีผลแบบนี้” คือไม่ทำให้โดปามีนเพิ่มขึ้น)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">A. 蛋糕：</span>
+          蛋糕含糖多，属于会提高多巴胺的食物。  
+          (เค้กมีน้ำตาลเยอะ จัดเป็นกลุ่มที่ทำให้โดปามีนสูงขึ้นได้)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">B. 冰淇淋：</span>
+          冰淇淋同样很甜，和文章里的“糖”效果相似。  
+          (ไอศกรีมก็หวานและมีน้ำตาลสูง คล้ายอาหารในกลุ่มที่ทำให้โดปามีนเพิ่ม)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">D. 甜饮料：</span>
+          甜饮料里一般有很多糖，也会影响多巴胺。  
+          (เครื่องดื่มหวานก็มักมีน้ำตาลสูง จึงมีผลต่อโดปามีนเช่นกัน)
+        </div>
+      </div>
+    </div>
+
+    <!-- ข้อ 8 -->
+    <div class="question" data-question="8" data-answer="A">
+      <div class="question-header">第 8 题</div>
+      <div class="question-zh">大脑为什么喜欢新的味道？</div>
+      <div class="question-th">ทำไมสมองถึง “ชอบ” รสชาติใหม่ ๆ ตามที่บทความอธิบาย?</div>
+      <div class="choices">
+        <label class="choice">
+          <input type="radio" name="q8" value="A">
+          A. 可以发现坏掉的食物
+        </label>
+        <label class="choice">
+          <input type="radio" name="q8" value="B">
+          B. 可以吃得更多
+        </label>
+        <label class="choice">
+          <input type="radio" name="q8" value="C">
+          C. 可以睡得更好
+        </label>
+        <label class="choice">
+          <input type="radio" name="q8" value="D">
+          D. 可以不觉得饿
+        </label>
+      </div>
+      <div class="explanation">
+        <div class="exp-title">解析（คำอธิบาย）</div>
+        <div class="exp-block exp-correct">
+          <span class="exp-choice-label">A. 可以发现坏掉的食物：</span>
+          这是文章中解释大脑对“新味道”敏感的原因之一。  
+          (นี่คือเหตุผลที่บทความยกมาโดยตรงว่า สมองไวต่อรสใหม่เพื่อช่วยให้เรารู้ว่าอาหารเสียหรือไม่)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">B. 可以吃得更多：</span>
+          文章没有说是为了“多吃”。  
+          (บทความไม่ได้บอกว่าเพราะอยากกินเยอะขึ้น)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">C. 可以睡得更好：</span>
+          和睡觉无关，文章没有提到。  
+          (ไม่เกี่ยวกับการนอนหลับ และไม่ได้ถูกพูดถึง)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">D. 可以不觉得饿：</span>
+          文章没有说新味道能“让人不饿”。  
+          (บทความไม่ได้บอกว่ารสชาติใหม่ทำให้ไม่หิว)
+        </div>
+      </div>
+    </div>
+
+    <!-- ข้อ 9 -->
+    <div class="question" data-question="9" data-answer="C">
+      <div class="question-header">第 9 题</div>
+      <div class="question-zh">如果一个人吃太多糖，多巴胺会怎么样？</div>
+      <div class="question-th">ถ้าคนเรากินน้ำตาลมากเกินไป ระดับโดปามีนจะเป็นอย่างไร?</div>
+      <div class="choices">
+        <label class="choice">
+          <input type="radio" name="q9" value="A">
+          A. 很快变少
+        </label>
+        <label class="choice">
+          <input type="radio" name="q9" value="B">
+          B. 完全不出现
+        </label>
+        <label class="choice">
+          <input type="radio" name="q9" value="C">
+          C. 一直保持在较高水平
+        </label>
+        <label class="choice">
+          <input type="radio" name="q9" value="D">
+          D. 让人马上生病
+        </label>
+      </div>
+      <div class="explanation">
+        <div class="exp-title">解析（คำอธิบาย）</div>
+        <div class="exp-block exp-correct">
+          <span class="exp-choice-label">C. 一直保持在较高水平：</span>
+          文章指出“多巴胺不会变得稳定，而是会一直保持在较高水平”。  
+          (บทความบอกตรง ๆ ว่า “โดปามีนจะไม่คงที่ แต่จะอยู่ในระดับสูงต่อเนื่อง” เมื่อกินน้ำตาลมากเกินไป)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">A. 很快变少：</span>
+          文章没有说会变少，恰恰相反，说的是“不稳定、偏高”。  
+          (ไม่ได้ลดลงเร็ว แต่กลับสูงต่อเนื่อง จึงผิดจากบทความ)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">B. 完全不出现：</span>
+          多巴胺不会“消失”，文章没有这么说。  
+          (โดปามีนไม่หายไปเลย บทความไม่ได้บอกแบบนั้น)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">D. 让人马上生病：</span>
+          文章讨论的是“想继续吃”和上瘾感，不是“立刻生病”。  
+          (ประเด็นคืออยากกินต่อและความรู้สึกคล้ายเสพติด ไม่ใช่ป่วยทันที)
+        </div>
+      </div>
+    </div>
+
+    <!-- ข้อ 10 -->
+    <div class="question" data-question="10" data-answer="B">
+      <div class="question-header">第 10 题</div>
+      <div class="question-zh">文章最后说，偶尔吃一块蛋糕怎么样？</div>
+      <div class="question-th">ท้ายบทความบอกว่า ถ้ากินเค้กเป็นครั้งคราว จะเป็นอย่างไร?</div>
+      <div class="choices">
+        <label class="choice">
+          <input type="radio" name="q10" value="A">
+          A. 一定会生病
+        </label>
+        <label class="choice">
+          <input type="radio" name="q10" value="B">
+          B. 没问题
+        </label>
+        <label class="choice">
+          <input type="radio" name="q10" value="C">
+          C. 肯定会发胖
+        </label>
+        <label class="choice">
+          <input type="radio" name="q10" value="D">
+          D. 会影响睡觉
+        </label>
+      </div>
+      <div class="explanation">
+        <div class="exp-title">解析（คำอธิบาย）</div>
+        <div class="exp-block exp-correct">
+          <span class="exp-choice-label">B. 没问题：</span>
+          文章最后说“偶尔吃一块蛋糕是没有问题的”。  
+          (บทความปิดท้ายว่า “กินเค้กนาน ๆ ครั้งไม่เป็นปัญหา” เลยตรงกับข้อนี้)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">A. 一定会生病：</span>
+          文章没有这么严重的说法。  
+          (บทความไม่ได้บอกว่าต้องป่วยแน่ ๆ ถ้ากินเค้กชิ้นเดียวเป็นครั้งคราว)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">C. 肯定会发胖：</span>
+          只是说“没问题”，没有说“一定会胖”。  
+          (เขาบอกแค่ว่าไม่เป็นไร ไม่ได้บอกว่าจะอ้วนแน่นอน)
+        </div>
+        <div class="exp-block exp-wrong">
+          <span class="exp-choice-label">D. 会影响睡觉：</span>
+          文章没有提到和睡觉有关的内容。  
+          (ไม่มีข้อความไหนพูดถึงผลต่อการนอนหลับ)
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="checkBtn">ตรวจคำตอบทั้งหมด</button>
+    </div>
+
+    <!-- กล่อง Feedback -->
+    <div class="feedback-box">
+      <div class="feedback-title">แบบประเมินแบบทดสอบ & ความคิดเห็น</div>
+      <div class="feedback-sub">
+        ช่วยให้คะแนนแบบทดสอบนี้ และเขียนข้อเสนอแนะเล็กน้อย เพื่อนำไปปรับปรุงต่อ 🙌
+      </div>
+      <div class="rating-row">
+        ความพอใจต่อแบบทดสอบ (1 = น้อยมาก, 5 = ดีมาก):<br/>
+        <label><input type="radio" name="rating" value="1"> 1</label>
+        <label><input type="radio" name="rating" value="2"> 2</label>
+        <label><input type="radio" name="rating" value="3"> 3</label>
+        <label><input type="radio" name="rating" value="4"> 4</label>
+        <label><input type="radio" name="rating" value="5"> 5</label>
+      </div>
+      <div>
+        ข้อเสนอแนะเพิ่มเติม / สิ่งที่อยากให้ปรับปรุง:<br/>
+        <textarea id="feedbackText" class="feedback-textarea" placeholder="เช่น อยากให้มีข้อสอบฟังเพิ่ม, อยากให้มีระดับ HSK3 เพิ่ม, อยากให้มี timer ฯลฯ"></textarea>
+      </div>
+      <div class="feedback-actions">
+        <button id="feedbackBtn" type="button">ส่งความคิดเห็นผ่านอีเมล</button>
+        <div id="feedbackMsg" class="feedback-msg">กำลังเตรียมอีเมลให้คุณ…</div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Tip: ใช้หน้านี้เป็นแบบฝึกหัด HSK4 ได้ ทั้งอ่าน–ทำโจทย์–ดูคำอธิบาย–เก็บ feedback จากผู้เรียน
+    </div>
+  </div>
+
+  <script>
+    const checkBtn = document.getElementById('checkBtn');
+    const scoreBox = document.getElementById('scoreBox');
+
+    let lastScoreText = ""; // เก็บข้อความคะแนนล่าสุด
+
+    checkBtn.addEventListener('click', () => {
+      const questions = document.querySelectorAll('.question');
+      let correctCount = 0;
+      let total = questions.length;
+
+      questions.forEach(q => {
+        const qNum = q.getAttribute('data-question');
+        const answer = q.getAttribute('data-answer');
+        const selected = document.querySelector(`input[name="q${qNum}"]:checked`);
+        const explanation = q.querySelector('.explanation');
+
+        q.classList.remove('correct', 'incorrect');
+
+        if (selected) {
+          if (selected.value === answer) {
+            correctCount++;
+            q.classList.add('correct');
+          } else {
+            q.classList.add('incorrect');
+          }
+        } else {
+          q.classList.add('incorrect');
+        }
+
+        if (explanation) {
+          explanation.style.display = 'block';
+        }
+      });
+
+      lastScoreText = `ได้คะแนน ${correctCount} / ${total}`;
+      scoreBox.style.display = 'block';
+      scoreBox.innerHTML = `คุณได้คะแนน <span>${correctCount} / ${total}</span>`;
+    });
+
+    // Feedback section
+    const feedbackBtn = document.getElementById('feedbackBtn');
+    const feedbackMsg = document.getElementById('feedbackMsg');
+    const feedbackText = document.getElementById('feedbackText');
+
+    feedbackBtn.addEventListener('click', () => {
+      // เปลี่ยนอีเมลนี้เป็นอีเมลของคุณ
+      const teacherEmail = "your_email@example.com";
+
+      // คะแนนพอใจ
+      const ratingSelected = document.querySelector('input[name="rating"]:checked');
+      let ratingValue = ratingSelected ? ratingSelected.value : "ยังไม่ให้คะแนน";
+
+      // ข้อความรีวิว
+      const review = feedbackText.value.trim() || "ไม่มีข้อความเพิ่มเติม";
+
+      // ถ้ายังไม่กดตรวจข้อสอบเลย lastScoreText จะว่าง
+      const scoreInfo = lastScoreText || "ยังไม่กดตรวจข้อสอบ";
+
+      const subject = encodeURIComponent("Feedback: แบบทดสอบ 糖和大脑 HSK4");
+      const bodyLines = [
+        "ข้อมูลผู้ทำแบบทดสอบ:",
+        "",
+        `- คะแนนที่ได้จากแบบทดสอบ: ${scoreInfo}`,
+        `- ความพอใจต่อแบบทดสอบ (1-5): ${ratingValue}`,
+        "",
+        "ข้อเสนอแนะ / สิ่งที่อยากให้ปรับปรุง:",
+        review,
+        "",
+        "ส่งจากหน้าเว็บแบบทดสอบ 糖和大脑"
+      ];
+      const body = encodeURIComponent(bodyLines.join("\n"));
+
+      const mailtoLink = `mailto:${teacherEmail}?subject=${subject}&body=${body}`;
+
+      feedbackMsg.style.display = 'block';
+      feedbackMsg.textContent = "กำลังเปิดแอปอีเมลบนเครื่องของคุณ…";
+
+      // เปิดหน้าต่างอีเมล
+      window.location.href = mailtoLink;
+    });
+  </script>
+</body>
+</html>
