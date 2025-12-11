@@ -565,7 +565,7 @@
       const scoreInfo = lastScoreText || 'ยังไม่กดตรวจข้อสอบ';
 
       // ตรวจว่าแก้ action และ entry.xxx แล้วหรือยัง (กันลืม)
-      if (gform.action.indexOf('YOUR_GOOGLE_FORM_ID') !== -1) {
+      if (gform.action.indexOf('1FAIpQLSehzP2FVF0VY0LGsqzsU0ZY2CnfEEyexoUdBGcU2lhdQ_yaBA') !== -1) {
         feedbackError.style.display = 'block';
         feedbackMsg.style.display = 'none';
         alert('กรุณาแก้ action ในฟอร์มให้เป็น URL formResponse ของ Google Form ของคุณ และปรับ entry.*** ให้ตรงก่อน');
